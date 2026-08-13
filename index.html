@@ -3,406 +3,346 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BlackBit — Криптовалютная биржа</title>
-    <meta name="description" content="BlackBit — современная криптовалютная биржа с низкими комиссиями">
-    
-    <!-- TradingView -->
+    <title>BlackBit — Купить криптовалюту</title>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        /* ===== RESET ===== */
+        /* ===== RESET & VARIABLES ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         :root {
-            --primary: #0066ff;
-            --primary-dark: #0052cc;
-            --primary-light: #e6f0ff;
-            --success: #22a65e;
-            --danger: #e74c3c;
-            --warning: #f39c12;
-            --text: #1a1a2e;
-            --text-secondary: #6b6b80;
-            --text-light: #a0a0b8;
-            --bg: #f0f2f5;
-            --bg-card: #ffffff;
-            --border: #e8e8ef;
-            --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-            --shadow-hover: 0 8px 40px rgba(0, 0, 0, 0.12);
-            --radius: 16px;
-            --radius-sm: 10px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg-primary: #0a0b1e;
+            --bg-secondary: #13152b;
+            --bg-card: #1a1d3a;
+            --bg-card-hover: #23264a;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3c9;
+            --accent: #f7931a;
+            --accent-hover: #e07c0e;
+            --border-color: #2a2d4a;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --radius: 12px;
+            --transition: all 0.3s ease;
         }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--text);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
         }
-        
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-        
+
+        a { text-decoration: none; color: inherit; }
+        button { font-family: inherit; cursor: pointer; }
+
         /* ===== NAVBAR ===== */
         .navbar {
-            background: var(--bg-card);
-            border-bottom: 1px solid var(--border);
-            padding: 0 24px;
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.95);
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 11, 30, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
         }
-        
+
         .navbar-content {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 64px;
+            height: 70px;
         }
-        
+
         .nav-logo {
             display: flex;
             align-items: center;
             gap: 10px;
             font-size: 24px;
-            font-weight: 800;
-            color: var(--text);
+            font-weight: 900;
         }
-        
+
         .nav-logo .icon {
             width: 36px;
             height: 36px;
-            background: var(--primary);
-            border-radius: var(--radius-sm);
+            background: var(--accent);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
             font-size: 18px;
+            color: var(--bg-primary);
         }
-        
-        .nav-logo span {
-            color: var(--primary);
-        }
-        
+
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
         }
-        
+
         .nav-links a {
             padding: 8px 16px;
-            border-radius: var(--radius-sm);
+            border-radius: 8px;
             font-size: 14px;
             font-weight: 500;
             color: var(--text-secondary);
             transition: var(--transition);
         }
-        
+
         .nav-links a:hover {
-            background: var(--bg);
-            color: var(--text);
+            color: var(--text-primary);
+            background: var(--bg-card);
         }
-        
-        .nav-links a.active {
-            color: var(--primary);
-            background: var(--primary-light);
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        
-        .nav-btn {
+
+        .btn-nav {
             padding: 8px 20px;
-            border-radius: var(--radius-sm);
+            border-radius: 8px;
             font-size: 14px;
             font-weight: 600;
             border: none;
-            cursor: pointer;
             transition: var(--transition);
-            font-family: inherit;
         }
-        
-        .nav-btn.primary {
-            background: var(--primary);
-            color: white;
+
+        .btn-nav.outline {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
         }
-        
-        .nav-btn.primary:hover {
-            background: var(--primary-dark);
+
+        .btn-nav.outline:hover {
+            color: var(--text-primary);
+            border-color: var(--text-secondary);
+        }
+
+        .btn-nav.primary {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .btn-nav.primary:hover {
+            background: var(--accent-hover);
             transform: translateY(-1px);
         }
-        
-        .nav-btn.outline {
-            background: transparent;
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-        
-        .nav-btn.outline:hover {
-            background: var(--bg);
-        }
-        
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            cursor: pointer;
-            padding: 4px;
-        }
-        
-        .hamburger span {
-            width: 24px;
-            height: 2px;
-            background: var(--text);
-            border-radius: 2px;
-            transition: var(--transition);
-        }
-        
+
         /* ===== HERO ===== */
         .hero {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 24px;
+            padding: 120px 20px 60px;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 40px;
             align-items: center;
+            min-height: 80vh;
         }
-        
+
         .hero-text h1 {
-            font-size: 44px;
-            font-weight: 800;
+            font-size: 48px;
+            font-weight: 900;
             line-height: 1.1;
             margin-bottom: 16px;
         }
-        
+
         .hero-text h1 span {
-            color: var(--primary);
+            color: var(--accent);
         }
-        
+
         .hero-text p {
             font-size: 18px;
             color: var(--text-secondary);
             line-height: 1.6;
-            margin-bottom: 24px;
+            margin-bottom: 32px;
             max-width: 480px;
         }
-        
+
         .hero-buttons {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
         }
-        
-        .hero-buttons .btn {
-            padding: 14px 32px;
-            border-radius: var(--radius-sm);
+
+        .btn-hero {
+            padding: 14px 36px;
+            border-radius: 10px;
             font-size: 16px;
             font-weight: 600;
             border: none;
-            cursor: pointer;
             transition: var(--transition);
-            font-family: inherit;
         }
-        
-        .hero-buttons .btn-primary {
-            background: var(--primary);
-            color: white;
+
+        .btn-hero.primary {
+            background: var(--accent);
+            color: var(--bg-primary);
         }
-        
-        .hero-buttons .btn-primary:hover {
-            background: var(--primary-dark);
+
+        .btn-hero.primary:hover {
+            background: var(--accent-hover);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 102, 255, 0.3);
+            box-shadow: 0 8px 24px rgba(247, 147, 26, 0.3);
         }
-        
-        .hero-buttons .btn-outline {
+
+        .btn-hero.outline {
             background: transparent;
-            color: var(--text);
-            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
         }
-        
-        .hero-buttons .btn-outline:hover {
-            background: var(--bg);
+
+        .btn-hero.outline:hover {
+            background: var(--bg-card);
             transform: translateY(-2px);
         }
-        
+
         .hero-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-top: 32px;
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
             padding-top: 32px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid var(--border-color);
         }
-        
-        .hero-stats .stat {
-            text-align: center;
-        }
-        
+
         .hero-stats .stat .value {
             font-size: 24px;
             font-weight: 700;
-            color: var(--text);
         }
-        
+
         .hero-stats .stat .label {
-            font-size: 13px;
+            font-size: 14px;
             color: var(--text-secondary);
             margin-top: 2px;
         }
-        
+
         .hero-chart {
             background: var(--bg-card);
             border-radius: var(--radius);
             padding: 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-color);
         }
-        
+
         .hero-chart .chart-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 16px;
         }
-        
+
         .hero-chart .chart-header .price {
             font-size: 28px;
             font-weight: 700;
         }
-        
+
         .hero-chart .chart-header .price .change {
             font-size: 16px;
             font-weight: 500;
             margin-left: 8px;
         }
-        
-        .hero-chart .chart-header .price .change.positive { color: var(--success); }
-        .hero-chart .chart-header .price .change.negative { color: var(--danger); }
-        
-        .hero-chart .chart-header .pair {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-        
+
+        .hero-chart .chart-header .price .change.positive { color: #22a65e; }
+        .hero-chart .chart-header .price .change.negative { color: #e74c3c; }
+
         #tradingview_chart {
             width: 100%;
             height: 300px;
-            border-radius: var(--radius-sm);
+            border-radius: 8px;
             overflow: hidden;
         }
-        
+
+        /* ===== FEATURES ===== */
+        .features {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+        }
+
+        .feature-card .icon {
+            font-size: 24px;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .feature-card h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
         /* ===== SECTION TITLE ===== */
         .section-title {
             text-align: center;
             margin-bottom: 40px;
         }
-        
+
         .section-title h2 {
             font-size: 32px;
             font-weight: 700;
         }
-        
+
         .section-title p {
             color: var(--text-secondary);
             margin-top: 8px;
             font-size: 16px;
         }
-        
-        /* ===== FEATURES ===== */
-        .features {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 60px 24px;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-        }
-        
-        .feature-card {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 32px 24px;
-            border: 1px solid var(--border);
-            transition: var(--transition);
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-hover);
-            border-color: var(--primary);
-        }
-        
-        .feature-card .icon {
-            width: 52px;
-            height: 52px;
-            border-radius: var(--radius-sm);
-            background: var(--primary-light);
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            margin-bottom: 16px;
-        }
-        
-        .feature-card h3 {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        
-        .feature-card p {
-            color: var(--text-secondary);
-            font-size: 14px;
-            line-height: 1.6;
-        }
-        
+
         /* ===== MARKETS ===== */
         .markets {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 60px 24px;
+            padding: 60px 20px;
         }
-        
+
         .markets-table {
             background: var(--bg-card);
             border-radius: var(--radius);
             overflow: hidden;
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-color);
         }
-        
+
         .markets-table table {
             width: 100%;
             border-collapse: collapse;
         }
-        
+
         .markets-table th {
-            background: var(--bg);
+            background: var(--bg-secondary);
             padding: 14px 20px;
             text-align: left;
             font-size: 13px;
@@ -411,96 +351,89 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        
+
         .markets-table td {
             padding: 14px 20px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid var(--border-color);
             font-size: 14px;
         }
-        
+
         .markets-table tr:hover td {
-            background: var(--bg);
+            background: var(--bg-card-hover);
         }
-        
+
         .markets-table .pair {
             font-weight: 600;
         }
-        
-        .markets-table .price {
-            font-weight: 500;
-        }
-        
-        .markets-table .change.positive { color: var(--success); }
-        .markets-table .change.negative { color: var(--danger); }
-        
+
+        .markets-table .change.positive { color: #22a65e; }
+        .markets-table .change.negative { color: #e74c3c; }
+
         .markets-table .trade-btn {
             padding: 4px 16px;
             border-radius: 6px;
             font-size: 12px;
             font-weight: 600;
             border: none;
-            background: var(--primary);
-            color: white;
-            cursor: pointer;
+            background: var(--accent);
+            color: var(--bg-primary);
             transition: var(--transition);
-            font-family: inherit;
         }
-        
+
         .markets-table .trade-btn:hover {
-            background: var(--primary-dark);
+            background: var(--accent-hover);
         }
-        
+
         /* ===== CTA ===== */
         .cta {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 60px 24px;
+            padding: 60px 20px;
         }
-        
+
         .cta-box {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
             border-radius: var(--radius);
             padding: 60px 40px;
             text-align: center;
-            color: white;
+            border: 1px solid var(--border-color);
         }
-        
+
         .cta-box h2 {
             font-size: 32px;
             font-weight: 700;
             margin-bottom: 12px;
         }
-        
+
         .cta-box p {
+            color: var(--text-secondary);
             font-size: 16px;
-            opacity: 0.9;
             margin-bottom: 24px;
         }
-        
+
         .cta-box .btn {
             padding: 14px 40px;
-            border-radius: var(--radius-sm);
+            border-radius: 10px;
             font-size: 16px;
             font-weight: 600;
             border: none;
-            cursor: pointer;
+            background: var(--accent);
+            color: var(--bg-primary);
             transition: var(--transition);
-            font-family: inherit;
-            background: white;
-            color: var(--primary);
         }
-        
+
         .cta-box .btn:hover {
-            transform: scale(1.05);
+            background: var(--accent-hover);
+            transform: scale(1.02);
         }
-        
+
         /* ===== FOOTER ===== */
         .footer {
-            background: var(--bg-card);
-            border-top: 1px solid var(--border);
-            padding: 40px 24px;
+            border-top: 1px solid var(--border-color);
+            padding: 40px 20px;
+            margin-top: 40px;
         }
-        
+
         .footer-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -508,7 +441,7 @@
             grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 40px;
         }
-        
+
         .footer-brand p {
             color: var(--text-secondary);
             font-size: 14px;
@@ -516,13 +449,13 @@
             max-width: 300px;
             margin-top: 12px;
         }
-        
+
         .footer-col h4 {
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 12px;
         }
-        
+
         .footer-col a {
             display: block;
             color: var(--text-secondary);
@@ -530,138 +463,132 @@
             padding: 4px 0;
             transition: var(--transition);
         }
-        
+
         .footer-col a:hover {
-            color: var(--primary);
+            color: var(--text-primary);
         }
-        
+
         .footer-bottom {
             max-width: 1200px;
             margin: 24px auto 0;
             padding-top: 24px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid var(--border-color);
             text-align: center;
             font-size: 13px;
             color: var(--text-secondary);
         }
-        
+
         /* ===== MODAL ===== */
         .modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
-        
+
         .modal-overlay.active {
             display: flex;
         }
-        
+
         .modal {
-            background: var(--bg-card);
+            background: var(--bg-secondary);
             border-radius: var(--radius);
             padding: 32px;
             max-width: 400px;
             width: 100%;
-            box-shadow: var(--shadow-hover);
+            border: 1px solid var(--border-color);
             animation: modalIn 0.3s ease;
         }
-        
+
         @keyframes modalIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
-        
+
         .modal .close {
             float: right;
             background: none;
             border: none;
             font-size: 24px;
             color: var(--text-secondary);
-            cursor: pointer;
             transition: var(--transition);
         }
-        
+
         .modal .close:hover {
-            color: var(--text);
+            color: var(--text-primary);
         }
-        
+
         .modal h2 {
             font-size: 24px;
             font-weight: 700;
             margin-bottom: 4px;
         }
-        
+
         .modal .sub {
             color: var(--text-secondary);
             font-size: 14px;
             margin-bottom: 20px;
         }
-        
+
         .modal .form-group {
             margin-bottom: 14px;
         }
-        
+
         .modal .form-group label {
             display: block;
             font-size: 13px;
             font-weight: 500;
             margin-bottom: 4px;
+            color: var(--text-secondary);
         }
-        
+
         .modal .form-group input {
             width: 100%;
             padding: 10px 14px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             font-size: 15px;
+            color: var(--text-primary);
             font-family: inherit;
             transition: var(--transition);
             outline: none;
         }
-        
+
         .modal .form-group input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(247, 147, 26, 0.1);
         }
-        
+
         .modal .btn-submit {
             width: 100%;
             padding: 12px;
-            background: var(--primary);
-            color: white;
+            background: var(--accent);
+            color: var(--bg-primary);
             border: none;
-            border-radius: var(--radius-sm);
+            border-radius: 8px;
             font-size: 15px;
             font-weight: 600;
-            cursor: pointer;
             transition: var(--transition);
-            font-family: inherit;
         }
-        
+
         .modal .btn-submit:hover {
-            background: var(--primary-dark);
+            background: var(--accent-hover);
         }
-        
+
         .modal .divider {
             text-align: center;
-            color: var(--text-light);
+            color: var(--text-secondary);
             font-size: 13px;
             margin: 16px 0;
             position: relative;
         }
-        
+
         .modal .divider::before,
         .modal .divider::after {
             content: '';
@@ -669,133 +596,126 @@
             top: 50%;
             width: 40%;
             height: 1px;
-            background: var(--border);
+            background: var(--border-color);
         }
-        
+
         .modal .divider::before { left: 0; }
         .modal .divider::after { right: 0; }
-        
+
         .modal .switch-link {
             text-align: center;
             margin-top: 12px;
             font-size: 14px;
             color: var(--text-secondary);
         }
-        
+
         .modal .switch-link span {
-            color: var(--primary);
+            color: var(--accent);
             cursor: pointer;
             font-weight: 500;
         }
-        
+
         .modal .switch-link span:hover {
             text-decoration: underline;
         }
-        
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
             .hero {
                 grid-template-columns: 1fr;
-                padding: 24px 20px;
+                padding: 100px 20px 40px;
+                text-align: center;
             }
-            
-            .hero-text h1 {
-                font-size: 36px;
+
+            .hero-text p {
+                margin-left: auto;
+                margin-right: auto;
             }
-            
+            .hero-buttons { justify-content: center; }
+            .hero-stats { justify-content: center; }
+
             .features-grid {
                 grid-template-columns: 1fr 1fr;
             }
-            
+
             .footer-content {
                 grid-template-columns: 1fr 1fr;
             }
         }
-        
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
             }
-            
+
             .nav-links.open {
                 display: flex;
                 flex-direction: column;
                 position: absolute;
-                top: 64px;
+                top: 70px;
                 left: 0;
                 right: 0;
-                background: var(--bg-card);
-                padding: 16px 24px;
-                border-bottom: 1px solid var(--border);
-                gap: 4px;
+                background: var(--bg-primary);
+                padding: 16px 20px;
+                border-bottom: 1px solid var(--border-color);
             }
-            
+
             .nav-links.open a {
                 padding: 12px 16px;
                 width: 100%;
             }
-            
+
             .hamburger {
                 display: flex;
+                flex-direction: column;
+                gap: 4px;
+                cursor: pointer;
+                padding: 4px;
             }
-            
+
+            .hamburger span {
+                width: 24px;
+                height: 2px;
+                background: var(--text-primary);
+                border-radius: 2px;
+            }
+
             .hero-text h1 {
-                font-size: 28px;
+                font-size: 32px;
             }
-            
+
             .hero-stats {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 8px;
+                flex-direction: column;
+                gap: 12px;
+                align-items: center;
             }
-            
-            .hero-stats .stat .value {
-                font-size: 18px;
-            }
-            
+
             .features-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .footer-content {
                 grid-template-columns: 1fr;
-                gap: 24px;
             }
-            
+
             .cta-box {
-                padding: 40px 20px;
+                padding: 32px 20px;
             }
-            
-            .cta-box h2 {
-                font-size: 24px;
-            }
-            
+            .cta-box h2 { font-size: 24px; }
+
             .markets-table {
                 overflow-x: auto;
             }
-            
             .markets-table table {
                 min-width: 500px;
             }
         }
-        
+
         @media (max-width: 480px) {
-            .hero-text h1 {
-                font-size: 24px;
-            }
-            
-            .hero-buttons .btn {
-                padding: 12px 24px;
-                font-size: 14px;
-                width: 100%;
-            }
-            
-            .hero-stats {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
-            
-            .hero-stats .stat .value {
-                font-size: 16px;
-            }
+            .hero-text h1 { font-size: 26px; }
+            .hero-buttons .btn-hero { width: 100%; }
+            .hero-chart .chart-header .price { font-size: 20px; }
+            .nav-actions .btn-nav { font-size: 12px; padding: 6px 14px; }
         }
     </style>
 </head>
@@ -806,21 +726,25 @@
         <div class="navbar-content">
             <a href="/" class="nav-logo">
                 <div class="icon">B</div>
-                Black<span>Bit</span>
+                BlackBit
             </a>
-            
+
             <div class="nav-links" id="navLinks">
-                <a href="#features">Возможности</a>
-                <a href="#markets">Рынки</a>
-                <a href="#about">О нас</a>
-                <button class="nav-btn outline" onclick="openModal('login')">Войти</button>
-                <button class="nav-btn primary" onclick="openModal('register')">Регистрация</button>
+                <a href="#">Купить</a>
+                <a href="#">Продать</a>
+                <a href="#">P2P</a>
+                <a href="#">Торговля</a>
+                <a href="#">Кошелёк</a>
             </div>
-            
-            <div class="hamburger" onclick="toggleMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
+
+            <div class="nav-actions">
+                <button class="btn-nav outline" onclick="openModal('login')">Вход</button>
+                <button class="btn-nav primary" onclick="openModal('register')">Регистрация</button>
+                <div class="hamburger" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
         </div>
     </nav>
@@ -828,11 +752,11 @@
     <!-- ===== HERO ===== -->
     <section class="hero">
         <div class="hero-text">
-            <h1>Торгуйте криптовалютой с <span>BlackBit</span></h1>
-            <p>Современная криптовалютная биржа с низкими комиссиями, высокой скоростью и надёжной безопасностью.</p>
+            <h1>Покупайте и продавайте <span>криптовалюту</span></h1>
+            <p>BlackBit — это безопасная и простая в использовании криптовалютная биржа для трейдеров любого уровня.</p>
             <div class="hero-buttons">
-                <button class="btn btn-primary" onclick="openModal('register')">Начать торговать</button>
-                <button class="btn btn-outline" onclick="document.getElementById('markets').scrollIntoView({behavior:'smooth'})">Смотреть рынки</button>
+                <button class="btn-hero primary" onclick="openModal('register')">Начать торговать</button>
+                <button class="btn-hero outline">Узнать больше</button>
             </div>
             <div class="hero-stats">
                 <div class="stat">
@@ -856,50 +780,40 @@
                         $64,870.00
                         <span class="change positive" id="heroChange">▲ +0.24%</span>
                     </div>
-                    <div class="pair">BTC/USDT</div>
+                    <div style="color: var(--text-secondary); font-size: 14px;">BTC/USDT</div>
                 </div>
-                <div class="pair">Spot</div>
+                <div style="color: var(--text-secondary); font-size: 14px;">Spot</div>
             </div>
             <div id="tradingview_chart"></div>
         </div>
     </section>
 
     <!-- ===== FEATURES ===== -->
-    <section class="features" id="features">
+    <section class="features">
         <div class="section-title">
-            <h2>Почему выбирают BlackBit</h2>
-            <p>Всё необходимое для успешной торговли в одном месте</p>
+            <h2>Почему BlackBit</h2>
+            <p>Всё необходимое для успешной торговли</p>
         </div>
         <div class="features-grid">
             <div class="feature-card">
                 <div class="icon"><i class="fas fa-shield-alt"></i></div>
-                <h3>Безопасность</h3>
-                <p>Многоуровневая защита, холодное хранение средств и 2FA аутентификация.</p>
+                <h4>Безопасность</h4>
+                <p>Многоуровневая защита и холодное хранение средств.</p>
             </div>
             <div class="feature-card">
                 <div class="icon"><i class="fas fa-bolt"></i></div>
-                <h3>Высокая скорость</h3>
-                <p>Мгновенное исполнение ордеров и высокая пропускная способность платформы.</p>
+                <h4>Высокая скорость</h4>
+                <p>Мгновенное исполнение ордеров и высокая пропускная способность.</p>
             </div>
             <div class="feature-card">
                 <div class="icon"><i class="fas fa-coins"></i></div>
-                <h3>Низкие комиссии</h3>
+                <h4>Низкие комиссии</h4>
                 <p>Конкурентные комиссии от 0.1% и скидки для активных трейдеров.</p>
             </div>
             <div class="feature-card">
-                <div class="icon"><i class="fas fa-mobile-alt"></i></div>
-                <h3>Мобильный доступ</h3>
-                <p>Торгуйте где угодно через Telegram Mini App или мобильный браузер.</p>
-            </div>
-            <div class="feature-card">
-                <div class="icon"><i class="fas fa-chart-line"></i></div>
-                <h3>Профессиональные инструменты</h3>
-                <p>Графики TradingView, стаканы заявок и множество индикаторов.</p>
-            </div>
-            <div class="feature-card">
                 <div class="icon"><i class="fas fa-headset"></i></div>
-                <h3>Поддержка 24/7</h3>
-                <p>Круглосуточная техническая поддержка в Telegram.</p>
+                <h4>Поддержка 24/7</h4>
+                <p>Круглосуточная поддержка в Telegram.</p>
             </div>
         </div>
     </section>
@@ -924,35 +838,35 @@
                 <tbody>
                     <tr>
                         <td class="pair">BTC/USDT</td>
-                        <td class="price">$64,870.00</td>
+                        <td>$64,870.00</td>
                         <td class="change positive">+0.24%</td>
                         <td>$1.2B</td>
                         <td><button class="trade-btn" onclick="openModal('register')">Торговать</button></td>
                     </tr>
                     <tr>
                         <td class="pair">ETH/USDT</td>
-                        <td class="price">$3,520.00</td>
+                        <td>$3,520.00</td>
                         <td class="change positive">+1.42%</td>
                         <td>$850M</td>
                         <td><button class="trade-btn" onclick="openModal('register')">Торговать</button></td>
                     </tr>
                     <tr>
                         <td class="pair">SOL/USDT</td>
-                        <td class="price">$178.50</td>
+                        <td>$178.50</td>
                         <td class="change negative">-2.15%</td>
                         <td>$420M</td>
                         <td><button class="trade-btn" onclick="openModal('register')">Торговать</button></td>
                     </tr>
                     <tr>
                         <td class="pair">BNB/USDT</td>
-                        <td class="price">$598.20</td>
+                        <td>$598.20</td>
                         <td class="change positive">+0.87%</td>
                         <td>$310M</td>
                         <td><button class="trade-btn" onclick="openModal('register')">Торговать</button></td>
                     </tr>
                     <tr>
                         <td class="pair">ADA/USDT</td>
-                        <td class="price">$0.6245</td>
+                        <td>$0.6245</td>
                         <td class="change positive">+3.42%</td>
                         <td>$180M</td>
                         <td><button class="trade-btn" onclick="openModal('register')">Торговать</button></td>
@@ -977,14 +891,13 @@
             <div class="footer-brand">
                 <a href="/" class="nav-logo" style="font-size:20px;">
                     <div class="icon" style="width:32px;height:32px;font-size:14px;">B</div>
-                    Black<span>Bit</span>
+                    BlackBit
                 </a>
-                <p>Современная криптовалютная биржа для торговли цифровыми активами. Надёжность, скорость и безопасность.</p>
+                <p>Современная криптовалютная биржа для торговли цифровыми активами.</p>
             </div>
             <div class="footer-col">
                 <h4>Платформа</h4>
-                <a href="#markets">Рынки</a>
-                <a href="#features">Возможности</a>
+                <a href="#">Рынки</a>
                 <a href="#">Торговые пары</a>
                 <a href="#">Комиссии</a>
             </div>
@@ -995,7 +908,7 @@
                 <a href="#">Документация</a>
             </div>
             <div class="footer-col">
-                <h4>Социальные сети</h4>
+                <h4>Соцсети</h4>
                 <a href="#">Telegram</a>
                 <a href="#">Twitter</a>
                 <a href="#">YouTube</a>
@@ -1023,7 +936,7 @@
         function openModal(type) {
             const overlay = document.getElementById('modalOverlay');
             const content = document.getElementById('modalContent');
-            
+
             if (type === 'login') {
                 content.innerHTML = `
                     <h2>Вход в аккаунт</h2>
@@ -1065,41 +978,31 @@
                     </div>
                 `;
             }
-            
+
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
-        
+
         function closeModal() {
             document.getElementById('modalOverlay').classList.remove('active');
             document.body.style.overflow = '';
         }
-        
-        // Закрытие по клику на оверлей
+
         document.getElementById('modalOverlay').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
         });
-        
-        // Закрытие по Escape
+
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') closeModal();
         });
-        
+
         // ============================================================
         // 2. МОБИЛЬНОЕ МЕНЮ
         // ============================================================
         function toggleMenu() {
-            const nav = document.getElementById('navLinks');
-            nav.classList.toggle('open');
+            document.getElementById('navLinks').classList.toggle('open');
         }
-        
-        // Закрытие меню при клике на ссылку
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('navLinks').classList.remove('open');
-            });
-        });
-        
+
         // ============================================================
         // 3. TRADINGVIEW ЧАРТ
         // ============================================================
@@ -1110,10 +1013,10 @@
                     "symbol": "BINANCE:BTCUSDT",
                     "interval": "D",
                     "height": 300,
-                    "theme": "light",
+                    "theme": "dark",
                     "style": "1",
                     "locale": "ru",
-                    "toolbar_bg": "#f0f2f5",
+                    "toolbar_bg": "#13152b",
                     "enable_publishing": false,
                     "hide_side_toolbar": true,
                     "allow_symbol_change": false,
@@ -1130,9 +1033,9 @@
                 });
             }
         }, 500);
-        
+
         // ============================================================
-        // 4. СИМУЛЯЦИЯ ЦЕНЫ (ДЛЯ ДЕМО)
+        // 4. СИМУЛЯЦИЯ ЦЕНЫ
         // ============================================================
         let price = 64870;
         setInterval(() => {
@@ -1141,9 +1044,10 @@
             const p = document.getElementById('heroPrice');
             const sign = change >= 0 ? '+' : '';
             const pct = (Math.random() * 0.5).toFixed(2);
+            const isPositive = change >= 0;
             p.innerHTML = `$${price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')} 
-                <span class="change ${change >= 0 ? 'positive' : 'negative'}">
-                    ${change >= 0 ? '▲' : '▼'} ${sign}${pct}%
+                <span class="change ${isPositive ? 'positive' : 'negative'}">
+                    ${isPositive ? '▲' : '▼'} ${sign}${pct}%
                 </span>`;
         }, 3000);
     </script>
