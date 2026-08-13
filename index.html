@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlackBit — Криптовалютная биржа</title>
+    <meta name="description" content="BlackBit — современная криптовалютная биржа с низкими комиссиями">
+    
+    <!-- TradingView -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #0066ff;
+            --primary-dark: #0052cc;
+            --primary-light: #e6f0ff;
+            --success: #22a65e;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --text: #1a1a2e;
+            --text-secondary: #6b6b80;
+            --text-light: #a0a0b8;
+            --bg: #f0f2f5;
+            --bg-card: #ffffff;
+            --border: #e8e8ef;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+        
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text);
+        }
+        
+        .nav-logo .icon {
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .nav-logo span {
+            color: var(--primary);
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-links a {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+        
+        .nav-links a.active {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+        
+        .nav-btn {
+            padding: 8px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        
+        .nav-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .nav-btn.primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        .nav-btn.outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .nav-btn.outline:hover {
+            background: var(--bg);
+        }
+        
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+            padding: 4px;
+        }
+        
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--text);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+        
+        /* ===== HERO ===== */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+        
+        .hero-text h1 {
+            font-size: 44px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+        
+        .hero-text h1 span {
+            color: var(--primary);
+        }
+        
+        .hero-text p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 24px;
+            max-width: 480px;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .hero-buttons .btn {
+            padding: 14px 32px;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        
+        .hero-buttons .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .hero-buttons .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 102, 255, 0.3);
+        }
+        
+        .hero-buttons .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .hero-buttons .btn-outline:hover {
+            background: var(--bg);
+            transform: translateY(-2px);
+        }
+        
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .hero-stats .stat {
+            text-align: center;
+        }
+        
+        .hero-stats .stat .value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+        }
+        
+        .hero-stats .stat .label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        
+        .hero-chart {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        
+        .hero-chart .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .hero-chart .chart-header .price {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .hero-chart .chart-header .price .change {
+            font-size: 16px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+        
+        .hero-chart .chart-header .price .change.positive { color: var(--success); }
+        .hero-chart .chart-header .price .change.negative { color: var(--danger); }
+        
+        .hero-chart .chart-header .pair {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        #tradingview_chart {
+            width: 100%;
+            height: 300px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+        
+        /* ===== SECTION TITLE ===== */
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-title h2 {
+            font-size: 32px;
+            font-weight: 700;
+        }
+        
+        .section-title p {
+            color: var(--text-secondary);
+            margin-top: 8px;
+            font-size: 16px;
+        }
+        
+        /* ===== FEATURES ===== */
+        .features {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        
+        .feature-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 32px 24px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+        
+        .feature-card .icon {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-sm);
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* ===== MARKETS ===== */
+        .markets {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+        
+        .markets-table {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .markets-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .markets-table th {
+            background: var(--bg);
+            padding: 14px 20px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .markets-table td {
+            padding: 14px 20px;
+            border-top: 1px solid var(--border);
+            font-size: 14px;
+        }
+        
+        .markets-table tr:hover td {
+            background: var(--bg);
+        }
+        
+        .markets-table .pair {
+            font-weight: 600;
+        }
+        
+        .markets-table .price {
+            font-weight: 500;
+        }
+        
+        .markets-table .change.positive { color: var(--success); }
+        .markets-table .change.negative { color: var(--danger); }
+        
+        .markets-table .trade-btn {
+            padding: 4px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        
+        .markets-table .trade-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* ===== CTA ===== */
+        .cta {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+        
+        .cta-box {
+            background: var(--primary);
+            border-radius: var(--radius);
+            padding: 60px 40px;
+            text-align: center;
+            color: white;
+        }
+        
+        .cta-box h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .cta-box p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 24px;
+        }
+        
+        .cta-box .btn {
+            padding: 14px 40px;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            background: white;
+            color: var(--primary);
+        }
+        
+        .cta-box .btn:hover {
+            transform: scale(1.05);
+        }
+        
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 40px 24px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .footer-brand p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 300px;
+            margin-top: 12px;
+        }
+        
+        .footer-col h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .footer-col a {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 14px;
+            padding: 4px 0;
+            transition: var(--transition);
+        }
+        
+        .footer-col a:hover {
+            color: var(--primary);
+        }
+        
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 24px auto 0;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 32px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: var(--shadow-hover);
+            animation: modalIn 0.3s ease;
+        }
+        
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .modal .close {
+            float: right;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .modal .close:hover {
+            color: var(--text);
+        }
+        
+        .modal h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .modal .sub {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .modal .form-group {
+            margin-bottom: 14px;
+        }
+        
+        .modal .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .modal .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-family: inherit;
+            transition: var(--transition);
+            outline: none;
+        }
+        
+        .modal .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+        }
+        
+        .modal .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        
+        .modal .btn-submit:hover {
+            background: var(--primary-dark);
+        }
+        
+        .modal .divider {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 13px;
+            margin: 16px 0;
+            position: relative;
+        }
+        
+        .modal .divider::before,
+        .modal .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: var(--border);
+        }
+        
+        .modal .divider::before { left: 0; }
+        .modal .divider::after { right: 0; }
+        
+        .modal .switch-link {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .modal .switch-link span {
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .modal .switch-link span:hover {
+            text-decoration: underline;
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 24px 20px;
+            }
+            
+            .hero-text h1 {
+                font-size: 36px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .nav-links.open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 64px;
+                left: 0;
+                right: 0;
+                background: var(--bg-card);
+                padding: 16px 24px;
+                border-bottom: 1px solid var(--border);
+                gap: 4px;
+            }
+            
+            .nav-links.open a {
+                padding: 12px 16px;
+                width: 100%;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            .hero-text h1 {
+                font-size: 28px;
+            }
+            
+            .hero-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            
+            .hero-stats .stat .value {
+                font-size: 18px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .cta-box {
+                padding: 40px 20px;
+            }
+            
+            .cta-box h2 {
+                font-size: 24px;
+            }
+            
+            .markets-table {
+                overflow-x: auto;
+            }
+            
+            .markets-table table {
+                min-width: 500px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-text h1 {
+                font-size: 24px;
+            }
+            
+            .hero-buttons .btn {
+                padding: 12px 24px;
+                font-size: 14px;
+                width: 100%;
+            }
+            
+            .hero-stats {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+            
+            .hero-stats .stat .value {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="/" class="nav-logo">
+                <div class="icon">B</div>
+                Black<span>Bit</span>
+            </a>
+            
+            <div class="nav-links" id="navLinks">
+                <a href="#features">Возможности</a>
+                <a href="#markets">Рынки</a>
+                <a href="#about">О нас</a>
+                <button class="nav-btn outline" onclick="openModal('login')">Войти</button>
+                <button class="nav-btn primary" onclick="openModal('register')">Регистрация</button>
+            </div>
+            
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Торгуйте криптовалютой с <span>BlackBit</span></h1>
+            <p>Современная криптовалютная биржа с низкими комиссиями, высокой скоростью и надёжной безопасностью.</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" onclick="openModal('register')">Начать торговать</button>
+                <button class="btn btn-outline" onclick="document.getElementById('markets').scrollIntoView({behavior:'smooth'})">Смотреть рынки</button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="value">$2.4B</div>
+                    <div class="label">Объём за 24ч</div>
+                </div>
+                <div class="stat">
+                    <div class="value">150+</div>
+                    <div class="label">Торговых пар</div>
+                </div>
+                <div class="stat">
+                    <div class="value">50K</div>
+                    <div class="label">Активных трейдеров</div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-chart">
+            <div class="chart-header">
+                <div>
+                    <div class="price" id="heroPrice">
+                        $64,870.00
+                        <span class="change positive" id="heroChange">▲ +0.24%</span>
+                    </div>
+                    <div class="pair">BTC/USDT</div>
+                </div>
+                <div class="pair">Spot</div>
+            </div>
+            <div id="tradingview_chart"></div>
+        </div>
+    </section>
+
+    <!-- ===== FEATURES ===== -->
+    <section class="features" id="features">
+        <div class="section-title">
+            <h2>Почему выбирают BlackBit</h2>
+            <p>Всё необходимое для успешной торговли в одном месте</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>Безопасность</h3>
+                <p>Многоуровневая защита, холодное хранение средств и 2FA аутентификация.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-bolt"></i></div>
+                <h3>Высокая скорость</h3>
+                <p>Мгновенное исполнение ордеров и высокая пропускная способность платформы.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-coins"></i></div>
+                <h3>Низкие комиссии</h3>
+                <p>Конкурентные комиссии от 0.1% и скидки для активных трейдеров.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-mobile-alt"></i></div>
+                <h3>Мобильный доступ</h3>
+                <p>Торгуйте где угодно через Telegram Mini App или мобильный браузер.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Профессиональные инструменты</h3>
+                <p>Графики TradingView, стаканы заявок и множество индикаторов.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-headset"></i></div>
+                <h3>Поддержка 24/7</h3>
+                <p>Круглосуточная техническая поддержка в Telegram.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== MARKETS ===== -->
+    <section class="markets" id="markets">
+        <div class="section-title">
+            <h2>Популярные рынки</h2>
+            <p>Торгуйте самыми востребованными криптовалютными парами</p>
+        </div>
+        <div class="markets-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Пара</th>
+                        <th>Цена</th>
+                        <th>Изменение (24ч)</th>
+                        <th>Объём</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="pair">BTC/USDT</td>
+                        <td class="price">$64,870.00</td>
+                        <td class="change positive">+0.24%</td>
+                        <td>$1.2B</td>
+                        <td><button class="trade-btn" onclick="openModal('register')">Торговать</button></td>
+                    </tr>
+                    <tr>
+                        <td class="pair">ETH/USDT</td>
+                        <td class="price">$3,520.00</td>
+                        <td class="change positive">+1.42%</td>
+                        <td>$850M</td>
+                        <td><button class="trade-btn" onclick="openModal('register')">Торговать</button></td>
+                    </tr>
+                    <tr>
+                        <td class="pair">SOL/USDT</td>
+                        <td class="price">$178.50</td>
+                        <td class="change negative">-2.15%</td>
+                        <td>$420M</td>
+                        <td><button class="trade-btn" onclick="openModal('register')">Торговать</button></td>
+                    </tr>
+                    <tr>
+                        <td class="pair">BNB/USDT</td>
+                        <td class="price">$598.20</td>
+                        <td class="change positive">+0.87%</td>
+                        <td>$310M</td>
+                        <td><button class="trade-btn" onclick="openModal('register')">Торговать</button></td>
+                    </tr>
+                    <tr>
+                        <td class="pair">ADA/USDT</td>
+                        <td class="price">$0.6245</td>
+                        <td class="change positive">+3.42%</td>
+                        <td>$180M</td>
+                        <td><button class="trade-btn" onclick="openModal('register')">Торговать</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section class="cta">
+        <div class="cta-box">
+            <h2>Готовы начать?</h2>
+            <p>Присоединяйтесь к BlackBit и начните торговать уже сегодня</p>
+            <button class="btn" onclick="openModal('register')">Создать аккаунт</button>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="/" class="nav-logo" style="font-size:20px;">
+                    <div class="icon" style="width:32px;height:32px;font-size:14px;">B</div>
+                    Black<span>Bit</span>
+                </a>
+                <p>Современная криптовалютная биржа для торговли цифровыми активами. Надёжность, скорость и безопасность.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Платформа</h4>
+                <a href="#markets">Рынки</a>
+                <a href="#features">Возможности</a>
+                <a href="#">Торговые пары</a>
+                <a href="#">Комиссии</a>
+            </div>
+            <div class="footer-col">
+                <h4>Поддержка</h4>
+                <a href="https://t.me/BlackBit_support">Техподдержка</a>
+                <a href="#">FAQ</a>
+                <a href="#">Документация</a>
+            </div>
+            <div class="footer-col">
+                <h4>Социальные сети</h4>
+                <a href="#">Telegram</a>
+                <a href="#">Twitter</a>
+                <a href="#">YouTube</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 BlackBit. Все права защищены.
+        </div>
+    </footer>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="close" onclick="closeModal()">×</button>
+            <div id="modalContent">
+                <!-- Контент меняется через JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 1. МОДАЛЬНЫЕ ОКНА
+        // ============================================================
+        function openModal(type) {
+            const overlay = document.getElementById('modalOverlay');
+            const content = document.getElementById('modalContent');
+            
+            if (type === 'login') {
+                content.innerHTML = `
+                    <h2>Вход в аккаунт</h2>
+                    <p class="sub">Введите свои данные для входа</p>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="example@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" placeholder="Введите пароль">
+                    </div>
+                    <button class="btn-submit">Войти</button>
+                    <div class="divider">или</div>
+                    <div class="switch-link">
+                        Нет аккаунта? <span onclick="openModal('register')">Зарегистрироваться</span>
+                    </div>
+                `;
+            } else {
+                content.innerHTML = `
+                    <h2>Создать аккаунт</h2>
+                    <p class="sub">Начните торговать с BlackBit</p>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="example@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" placeholder="Придумайте пароль">
+                    </div>
+                    <div class="form-group">
+                        <label>Подтвердите пароль</label>
+                        <input type="password" placeholder="Повторите пароль">
+                    </div>
+                    <button class="btn-submit">Зарегистрироваться</button>
+                    <div class="divider">или</div>
+                    <div class="switch-link">
+                        Уже есть аккаунт? <span onclick="openModal('login')">Войти</span>
+                    </div>
+                `;
+            }
+            
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // Закрытие по клику на оверлей
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+        
+        // Закрытие по Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+        
+        // ============================================================
+        // 2. МОБИЛЬНОЕ МЕНЮ
+        // ============================================================
+        function toggleMenu() {
+            const nav = document.getElementById('navLinks');
+            nav.classList.toggle('open');
+        }
+        
+        // Закрытие меню при клике на ссылку
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('open');
+            });
+        });
+        
+        // ============================================================
+        // 3. TRADINGVIEW ЧАРТ
+        // ============================================================
+        setTimeout(function() {
+            if (typeof TradingView !== 'undefined') {
+                new TradingView.widget({
+                    "container_id": "tradingview_chart",
+                    "symbol": "BINANCE:BTCUSDT",
+                    "interval": "D",
+                    "height": 300,
+                    "theme": "light",
+                    "style": "1",
+                    "locale": "ru",
+                    "toolbar_bg": "#f0f2f5",
+                    "enable_publishing": false,
+                    "hide_side_toolbar": true,
+                    "allow_symbol_change": false,
+                    "details": false,
+                    "hotlist": false,
+                    "calendar": false,
+                    "studies": [],
+                    "hide_top_toolbar": true,
+                    "range": "12M",
+                    "save_image": false,
+                    "autosize": false,
+                    "timezone": "Europe/Moscow",
+                    "withdateranges": false
+                });
+            }
+        }, 500);
+        
+        // ============================================================
+        // 4. СИМУЛЯЦИЯ ЦЕНЫ (ДЛЯ ДЕМО)
+        // ============================================================
+        let price = 64870;
+        setInterval(() => {
+            const change = (Math.random() - 0.5) * 20;
+            price = Math.max(64000, Math.min(66000, price + change));
+            const p = document.getElementById('heroPrice');
+            const sign = change >= 0 ? '+' : '';
+            const pct = (Math.random() * 0.5).toFixed(2);
+            p.innerHTML = `$${price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')} 
+                <span class="change ${change >= 0 ? 'positive' : 'negative'}">
+                    ${change >= 0 ? '▲' : '▼'} ${sign}${pct}%
+                </span>`;
+        }, 3000);
+    </script>
+
+</body>
+</html>
